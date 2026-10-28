@@ -38,6 +38,23 @@ const Memorandum = () => (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="mb-8 aspect-video w-full overflow-hidden rounded-2xl glow-border bg-card"
+        >
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/V1vMMkc3FVM"
+            title="Educatefor.Life Memorandum video"
+            className="h-full w-full"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
           className="bg-card border border-border rounded-2xl p-6 md:p-10 glow-border space-y-6 text-foreground/90 text-base md:text-lg leading-relaxed"
         >
