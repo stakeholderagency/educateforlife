@@ -1,5 +1,6 @@
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Calendar, Users, Globe, Rocket, Award, Heart, Lightbulb, Handshake } from 'lucide-react';
+import { ArrowRight, Calendar, Users, Globe, Rocket, Award, Heart, Lightbulb, Handshake } from 'lucide-react';
 import communityImg from '@/assets/community-moments.jpg';
 import sprint2019Img from '@/assets/timeline/2019-sprint.jpg';
 import sprint2020Img from '@/assets/timeline/2020-sprint.jpg';
@@ -70,6 +71,7 @@ const timelineEvents = [
     description: 'A renewed community memorandum affirms our commitment: leveraging emerging technologies, fostering global partnerships, and building inclusive learning pathways that prepare individuals for tomorrow\'s challenges.',
     icon: Heart,
     highlight: 'growth',
+    href: '/memorandum',
   },
   {
     year: '2025–26',
@@ -79,6 +81,11 @@ const timelineEvents = [
     highlight: 'current',
   },
 ];
+
+const CardWrapper = ({ href, children }: { href?: string; children: React.ReactNode }) => {
+  const cls = 'block bg-card border border-border rounded-xl overflow-hidden glow-border hover:border-primary/30 transition-colors duration-300';
+  return href ? <Link to={href} className={cls}>{children}</Link> : <div className={cls}>{children}</div>;
+};
 
 const Timeline = () => {
   return (
@@ -170,7 +177,7 @@ const Timeline = () => {
                     isLeft ? 'md:pr-0 md:mr-auto' : 'md:pl-0 md:ml-auto'
                   }`}
                 >
-                  <div className="bg-card border border-border rounded-xl overflow-hidden glow-border hover:border-primary/30 transition-colors duration-300">
+                  <CardWrapper href={'href' in event ? (event.href as string) : undefined}>
                     {/* Milestone image */}
                     {event.image && (
                       <motion.div
@@ -204,8 +211,13 @@ const Timeline = () => {
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {event.description}
                       </p>
+                      {'href' in event && (
+                        <span className="inline-flex items-center gap-1.5 mt-4 text-sm font-medium text-primary">
+                          Read the Memorandum <ArrowRight className="w-4 h-4" />
+                        </span>
+                      )}
                     </div>
-                  </div>
+                  </CardWrapper>
                 </div>
               </motion.div>
             );

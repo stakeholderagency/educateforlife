@@ -13,6 +13,7 @@ import CommunityOverview from "./pages/CommunityOverview";
 import Members from "./pages/Members";
 import MemberProfile from "./pages/MemberProfile";
 import LegacyMemberProfile from "./pages/LegacyMemberProfile";
+import Memorandum from "./pages/Memorandum";
 import Timeline from "./pages/Timeline";
 import Library from "./pages/Library";
 import Chat from "./pages/Chat";
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/timeline" element={<Timeline />} />
+            <Route path="/memorandum" element={<Memorandum />} />
             <Route path="/library" element={<Library />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/chat/:slug" element={<Chat />} />
