@@ -9,4 +9,4 @@ Recreated 2026-10-28 from the Lovable project `96630f1e-46ba-4a76-9889-a6154b0b1
 - SPA routing: `vercel.json` rewrites everything except `/assets/` to `index.html`.
 - Auth redirects use `window.location.origin`; add each deployed origin to Supabase Auth → URL Configuration.
 - Privacy model: members see other members only through `public_profiles` / `public_legacy_members` (masked views); `legacy_members.email` is never readable by non-admins.
-- Legacy member avatars still point at Mighty Networks' imgix host; rehost them before that account is closed.
+- Legacy member avatars are rehosted in the `avatars` bucket under `legacy/<id>.<ext>` (done 2026-10-28); no Mighty Networks URLs remain.
