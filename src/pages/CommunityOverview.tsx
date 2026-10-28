@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
-import { Users, Rocket, GraduationCap, Heart, Briefcase, ArrowRight, Globe } from 'lucide-react';
+import { Users, ArrowRight, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 
@@ -40,13 +40,6 @@ const COUNTRY_COORDS: Record<string, [number, number]> = {
   'Ghana': [-2, 8], 'Tanzania': [35, -6],
   'Ethiopia': [40, 9], 'Morocco': [-5, 32],
 };
-
-const typeConfig = [
-  { key: 'entrepreneur', label: 'Entrepreneurs', icon: Rocket, color: 'text-primary' },
-  { key: 'academic', label: 'Academics', icon: GraduationCap, color: 'text-accent-foreground' },
-  { key: 'learner', label: 'Lifelong Learners', icon: Heart, color: 'text-destructive' },
-  { key: 'professional', label: 'Professionals', icon: Briefcase, color: 'text-muted-foreground' },
-];
 
 interface MemberStats {
   total_count: number;
@@ -117,24 +110,15 @@ const CommunityOverview = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12"
+            className="flex justify-center mb-12"
           >
-            <div className="col-span-2 md:col-span-1 bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
+            <div className="w-full max-w-xs bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
               <Users className="w-8 h-8 text-primary mx-auto mb-2" />
               <div className="font-display text-3xl font-bold text-foreground">
                 {loading ? '—' : stats?.total_count || 0}
               </div>
               <div className="text-sm text-muted-foreground">Total Members</div>
             </div>
-            {typeConfig.map(({ key, label, icon: Icon, color }) => (
-              <div key={key} className="bg-card border border-border rounded-xl p-4 text-center">
-                <Icon className={`w-6 h-6 ${color} mx-auto mb-1`} />
-                <div className="font-display text-2xl font-bold text-foreground">
-                  {loading ? '—' : stats?.type_counts?.[key] || 0}
-                </div>
-                <div className="text-xs text-muted-foreground">{label}</div>
-              </div>
-            ))}
           </motion.div>
 
           {/* World Map */}
