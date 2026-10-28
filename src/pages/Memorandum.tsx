@@ -67,15 +67,15 @@ const Memorandum = () => (
           </ul>
           <p>
             Our growing global community has demonstrated that collaborative, community-driven education can deliver
-            profound impact without centralized control. This approach not only enhances life long learning outcomes
-            but also strengthens social fabric and peaceful and mutually inspiring global cocreation across generations
-            and cultures.
+            profound impact without centralized control. This approach not only enhances lifelong learning outcomes
+            but also strengthens the social fabric and fosters peaceful, mutually inspiring global cocreation across
+            generations and cultures.
           </p>
           <p>
             As we move forward, we commit to leveraging emerging technologies, fostering global partnerships, and
             building inclusive learning pathways that prepare individuals for the challenges and opportunities of
             tomorrow. The future of education is not just about transferring knowledge; it&apos;s about creating
-            empowered, adaptable global citizens, who can thrive in an ever-changing world.
+            empowered, adaptable global citizens who can thrive in an ever-changing world.
           </p>
           <p className="font-display text-xl md:text-2xl text-foreground">
             Together, we are building an educational ecosystem that is accessible, personalized, and responsive to the

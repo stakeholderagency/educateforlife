@@ -21,6 +21,7 @@ const navLinks: NavLink[] = [
     href: "/#about",
     children: [
       { label: "Timeline", href: "/timeline" },
+      { label: "Memorandum", href: "/memorandum" },
     ],
   },
   { label: "Skills", href: "/skills" },

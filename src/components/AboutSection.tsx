@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 
 const checkpoints = [
   "Develop Your Own Pathways in Life",
@@ -43,6 +44,13 @@ const AboutSection = () => {
                 </div>
               ))}
             </div>
+
+            <Link
+              to="/memorandum"
+              className="inline-flex items-center gap-2 mt-8 text-sm font-medium text-primary hover:underline"
+            >
+              Read our Memorandum <ArrowRight className="w-4 h-4" />
+            </Link>
           </motion.div>
         </div>
       </div>

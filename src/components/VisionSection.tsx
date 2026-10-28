@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Quote } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight, Quote } from "lucide-react";
 
 const VisionSection = () => {
   return (
@@ -55,6 +56,12 @@ const VisionSection = () => {
             Together, we are building an educational ecosystem that is accessible, personalized,
             and responsive to the needs of all learners, anywhere and at any time.
           </p>
+          <Link
+            to="/memorandum"
+            className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline"
+          >
+            Read our Memorandum <ArrowRight className="w-4 h-4" />
+          </Link>
         </motion.div>
       </div>
     </section>
