@@ -71,9 +71,7 @@ const ResetPassword = () => {
       >
         <div className="text-center mb-8">
           <a href="/" className="font-display font-bold text-2xl tracking-tight inline-block mb-4">
-            <span className="text-gradient-primary">Educate</span>
-            <span className="text-foreground">for.</span>
-            <span className="text-gradient-warm">Life</span>
+            <img src="/logo.png" alt="Educatefor.Life" className="w-16 h-16 mx-auto" />
           </a>
           <p className="text-muted-foreground">Set your new password</p>
         </div>

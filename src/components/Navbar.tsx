@@ -40,10 +40,7 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between h-16 md:h-20">
         <Link to="/" className="flex items-center gap-2 font-display font-bold text-xl md:text-2xl tracking-tight">
-          <img src={logo} alt="Educatefor.Life" className="w-8 h-8 md:w-10 md:h-10" />
-          <span className="text-gradient-primary">Educate</span>
-          <span className="text-foreground">for.</span>
-          <span className="text-gradient-warm">Life</span>
+          <img src={logo} alt="Educatefor.Life" className="w-10 h-10 md:w-12 md:h-12" />
         </Link>
 
         <div className="hidden md:flex items-center gap-8">

@@ -264,9 +264,7 @@ const ProfileSetup = () => {
       <div className="w-full max-w-2xl">
         <div className="text-center mb-8">
           <a href="/" className="font-display font-bold text-2xl tracking-tight inline-block mb-2">
-            <span className="text-gradient-primary">Educate</span>
-            <span className="text-foreground">for.</span>
-            <span className="text-gradient-warm">Life</span>
+            <img src="/logo.png" alt="Educatefor.Life" className="w-16 h-16 mx-auto" />
           </a>
           <h1 className="font-display text-2xl font-bold text-foreground mt-4">Set Up Your Profile</h1>
           <p className="text-muted-foreground mt-1">Tell us about yourself so we can match you with the right people.</p>
