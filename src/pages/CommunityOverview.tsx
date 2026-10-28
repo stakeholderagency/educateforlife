@@ -4,7 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
-import { Users, ArrowRight, Globe } from 'lucide-react';
+import { Users, ArrowRight, Globe, MapPin, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 
@@ -45,6 +45,8 @@ interface MemberStats {
   total_count: number;
   locations: Array<{ city: string | null; country: string | null }> | null;
   type_counts: Record<string, number> | null;
+  countries_count: number | null;
+  newest_member: { name: string; joined_at: string } | null;
 }
 
 const CommunityOverview = () => {
@@ -110,14 +112,28 @@ const CommunityOverview = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="flex justify-center mb-12"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12"
           >
-            <div className="w-full max-w-xs bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
+            <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
               <Users className="w-8 h-8 text-primary mx-auto mb-2" />
               <div className="font-display text-3xl font-bold text-foreground">
                 {loading ? '—' : stats?.total_count || 0}
               </div>
               <div className="text-sm text-muted-foreground">Total Members</div>
+            </div>
+            <div className="bg-card border border-border rounded-xl p-6 text-center">
+              <MapPin className="w-8 h-8 text-primary mx-auto mb-2" />
+              <div className="font-display text-3xl font-bold text-foreground">
+                {loading ? '—' : stats?.countries_count || 0}
+              </div>
+              <div className="text-sm text-muted-foreground">Countries represented</div>
+            </div>
+            <div className="bg-card border border-border rounded-xl p-6 text-center">
+              <UserPlus className="w-8 h-8 text-primary mx-auto mb-2" />
+              <div className="font-display text-xl font-bold text-foreground min-h-9 flex items-center justify-center">
+                {loading ? '—' : stats?.newest_member?.name || 'No new members yet'}
+              </div>
+              <div className="text-sm text-muted-foreground">Newest member</div>
             </div>
           </motion.div>
 
