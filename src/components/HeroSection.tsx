@@ -1,10 +1,14 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-community.jpg";
-import { ArrowRight, Globe } from "lucide-react";
+import { ArrowRight, Globe, Play } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 
 const HeroSection = () => {
+  const [watching, setWatching] = useState(false);
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background image with overlay */}
@@ -60,6 +64,10 @@ const HeroSection = () => {
                 Learn More
               </a>
             </Button>
+            <Button variant="heroOutline" size="lg" onClick={() => setWatching(true)}>
+              <Play className="mr-2 w-4 h-4" />
+              Watch
+            </Button>
           </motion.div>
         </motion.div>
 
@@ -76,6 +84,24 @@ const HeroSection = () => {
           </div>
         </motion.div>
       </div>
+
+      {/* The video only exists while the dialog is open, so closing it stops playback. */}
+      <Dialog open={watching} onOpenChange={setWatching}>
+        <DialogContent className="max-w-4xl p-0 overflow-hidden border-border bg-black">
+          <DialogTitle className="sr-only">Educatefor.Life jingle</DialogTitle>
+          <DialogDescription className="sr-only">Watch the Educatefor.Life jingle video.</DialogDescription>
+          <div className="aspect-video w-full">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/tF8KkbaFS8Q?autoplay=1&rel=0"
+              title="EducateforLife jingle"
+              className="h-full w-full"
+              allow="autoplay; encrypted-media; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
