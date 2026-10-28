@@ -101,6 +101,65 @@ export type Database = {
         }
         Relationships: []
       }
+      community_team_members: {
+        Row: {
+          created_at: string
+          role: string
+          team_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          role?: string
+          team_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          role?: string
+          team_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_team_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "community_teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_teams: {
+        Row: {
+          archived_at: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          kind: string
+          name: string
+        }
+        Insert: {
+          archived_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          kind?: string
+          name: string
+        }
+        Update: {
+          archived_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          kind?: string
+          name?: string
+        }
+        Relationships: []
+      }
       connection_requests: {
         Row: {
           created_at: string
@@ -615,6 +674,67 @@ export type Database = {
         }
         Relationships: []
       }
+      video_room_hosts: {
+        Row: {
+          host_room_url: string
+          room_id: string
+        }
+        Insert: {
+          host_room_url: string
+          room_id: string
+        }
+        Update: {
+          host_room_url?: string
+          room_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_room_hosts_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: true
+            referencedRelation: "video_rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      video_rooms: {
+        Row: {
+          created_at: string
+          ends_at: string
+          id: string
+          kind: string
+          room_url: string
+          team_id: string | null
+          whereby_meeting_id: string
+        }
+        Insert: {
+          created_at?: string
+          ends_at: string
+          id?: string
+          kind: string
+          room_url: string
+          team_id?: string | null
+          whereby_meeting_id: string
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string
+          id?: string
+          kind?: string
+          room_url?: string
+          team_id?: string | null
+          whereby_meeting_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_rooms_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: true
+            referencedRelation: "community_teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       public_legacy_members: {
@@ -760,6 +880,10 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      is_community_team_member: {
+        Args: { _team_id: string; _user_id: string }
         Returns: boolean
       }
       purge_old_chat_messages: { Args: never; Returns: undefined }

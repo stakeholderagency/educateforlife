@@ -15,6 +15,8 @@ import MemberProfile from "./pages/MemberProfile";
 import LegacyMemberProfile from "./pages/LegacyMemberProfile";
 import Memorandum from "./pages/Memorandum";
 import Timeline from "./pages/Timeline";
+import Townhall from "./pages/Townhall";
+import TeamRoom from "./pages/TeamRoom";
 import Library from "./pages/Library";
 import Chat from "./pages/Chat";
 import Skills from "./pages/Skills";
@@ -35,6 +37,8 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/timeline" element={<Timeline />} />
             <Route path="/memorandum" element={<Memorandum />} />
+            <Route path="/townhall" element={<Townhall />} />
+            <Route path="/teams/:teamId/room" element={<TeamRoom />} />
             <Route path="/library" element={<Library />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/chat/:slug" element={<Chat />} />
