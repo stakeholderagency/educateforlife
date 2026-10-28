@@ -1,4 +1,3 @@
-import CodeOfConductNotice from '@/components/CodeOfConductNotice';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -20,6 +19,7 @@ const Auth = () => {
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
   const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [agreed, setAgreed] = useState(false);
   const [resetSent, setResetSent] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -32,12 +32,17 @@ const Auth = () => {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!agreed) {
+      toast({ title: 'One more step', description: 'Please agree to the Code of Conduct to join.', variant: 'destructive' });
+      return;
+    }
     setLoading(true);
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { full_name: fullName },
+        // The sign-up trigger turns these into a dated row in user_consents.
+        data: { full_name: fullName, coc_accepted: 'true', coc_version: 'v1.0' },
         emailRedirectTo: getRedirectUrl('/profile/setup'),
       },
     });
@@ -82,11 +87,17 @@ const Auth = () => {
     setLoading(true);
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: getRedirectUrl('/profile/setup') },
+      // New accounts are made on the Sign Up tab, where the Code of Conduct is agreed to.
+      options: { emailRedirectTo: getRedirectUrl('/profile/setup'), shouldCreateUser: false },
     });
     setLoading(false);
     if (error) {
-      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+      const noAccount = /signups? not allowed/i.test(error.message);
+      toast({
+        title: noAccount ? 'No account found' : 'Error',
+        description: noAccount ? 'We could not find an account for that email. New here? Use the Sign Up tab.' : error.message,
+        variant: 'destructive',
+      });
     } else {
       setMagicLinkSent(true);
     }
@@ -203,10 +214,25 @@ const Auth = () => {
                     required
                   />
                 </div>
-                <Button type="submit" variant="hero" className="w-full" disabled={loading}>
+                <div className="flex items-start gap-3">
+                  <input
+                    id="coc-agree"
+                    type="checkbox"
+                    checked={agreed}
+                    onChange={(e) => setAgreed(e.target.checked)}
+                    required
+                    className="mt-1 h-4 w-4 shrink-0 accent-[hsl(var(--primary))]"
+                  />
+                  <label htmlFor="coc-agree" className="text-sm text-muted-foreground leading-snug">
+                    I agree to the{' '}
+                    <a href="/code-of-conduct" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-medium">
+                      Code of Conduct
+                    </a>
+                  </label>
+                </div>
+                <Button type="submit" variant="hero" className="w-full" disabled={loading || !agreed}>
                   {loading ? 'Creating account...' : 'Join the Community'}
                 </Button>
-                <CodeOfConductNotice className="mt-3" />
               </form>
             </TabsContent>
 
@@ -225,7 +251,7 @@ const Auth = () => {
               ) : (
                 <form onSubmit={handleMagicLink} className="space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    No password needed — we'll send a login link to your email.
+                    No password needed — we'll send a login link to your email. For existing members; new here? Use the Sign Up tab.
                   </p>
                   <div className="space-y-2">
                     <Label htmlFor="magic-email">Email</Label>
