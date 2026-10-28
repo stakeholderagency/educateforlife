@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import logo from "/logo.png";
 
 const Footer = () => {
@@ -17,6 +18,12 @@ const Footer = () => {
           >
             YouTube
           </a>
+          <Link
+            to="/code-of-conduct"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Code of Conduct
+          </Link>
           <a
             href="https://educatefor.life"
             target="_blank"

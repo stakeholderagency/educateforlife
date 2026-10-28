@@ -4,6 +4,7 @@ import { Loader2, PhoneOff, Video } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
+import CodeOfConductNotice from '@/components/CodeOfConductNotice';
 
 type RoomTarget = { room: 'townhall' } | { team_id: string };
 
@@ -94,7 +95,8 @@ const VideoRoom = ({ target, joinLabel = 'Join the call' }: { target: RoomTarget
             },
           })}
         </div>
-        <div className="flex justify-end">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <CodeOfConductNotice />
           <Button variant="outline" size="sm" onClick={leave} className="gap-2">
             <PhoneOff className="h-4 w-4" /> Leave
           </Button>
@@ -110,7 +112,8 @@ const VideoRoom = ({ target, joinLabel = 'Join the call' }: { target: RoomTarget
         {state === 'loading' && <Loader2 className="h-4 w-4 animate-spin" />}
         {state === 'loading' ? 'Opening the room…' : joinLabel}
       </Button>
-      <p className="mt-4 text-sm text-muted-foreground">
+      <CodeOfConductNotice className="mt-5 justify-center text-sm" />
+      <p className="mt-3 text-sm text-muted-foreground">
         Your browser will ask to use your camera and microphone. You can switch both off inside the call.
       </p>
       {problem && <p role="alert" className="mt-4 text-sm text-destructive">{PROBLEM_TEXT[problem]}</p>}

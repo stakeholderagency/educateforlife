@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -15,7 +15,7 @@ import MemberProfile from "./pages/MemberProfile";
 import LegacyMemberProfile from "./pages/LegacyMemberProfile";
 import Memorandum from "./pages/Memorandum";
 import Timeline from "./pages/Timeline";
-import CodeOfConductDraft from "./pages/CodeOfConductDraft";
+import CodeOfConduct from "./pages/CodeOfConduct";
 import Townhall from "./pages/Townhall";
 import TeamRoom from "./pages/TeamRoom";
 import Library from "./pages/Library";
@@ -38,7 +38,8 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/timeline" element={<Timeline />} />
             <Route path="/memorandum" element={<Memorandum />} />
-            <Route path="/code-of-conduct/draft" element={<CodeOfConductDraft />} />
+            <Route path="/code-of-conduct" element={<CodeOfConduct />} />
+            <Route path="/code-of-conduct/draft" element={<Navigate to="/code-of-conduct" replace />} />
             <Route path="/townhall" element={<Townhall />} />
             <Route path="/teams/:teamId/room" element={<TeamRoom />} />
             <Route path="/library" element={<Library />} />

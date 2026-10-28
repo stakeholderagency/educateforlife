@@ -1,3 +1,4 @@
+import CodeOfConductNotice from '@/components/CodeOfConductNotice';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -205,6 +206,7 @@ const Auth = () => {
                 <Button type="submit" variant="hero" className="w-full" disabled={loading}>
                   {loading ? 'Creating account...' : 'Join the Community'}
                 </Button>
+                <CodeOfConductNotice className="mt-3" />
               </form>
             </TabsContent>
 

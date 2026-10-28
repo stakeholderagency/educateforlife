@@ -15,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
+import CodeOfConductNotice from '@/components/CodeOfConductNotice';
 import { toast } from 'sonner';
 
 const ICONS: Record<string, typeof MessagesSquare> = {
@@ -338,7 +339,10 @@ const Chat = () => {
               </div>
             </ScrollArea>
 
-            <div className="p-4 border-t border-border/50 flex items-end gap-2">
+            <div className="px-4 pt-3 border-t border-border/50">
+              <CodeOfConductNotice />
+            </div>
+            <div className="p-4 pt-2 flex items-end gap-2">
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}

@@ -1,12 +1,10 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, FileWarning } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
-// DRAFT, not adopted. Items in [square brackets] are decisions still to make.
-// Review with a lawyer (children's data, safeguarding, Danish/EU law) before this goes live.
+// Have a lawyer review this (children's data, safeguarding, Danish/EU law) as the community grows.
 
 type Section = { title: string; intro?: string; items?: string[]; after?: string };
 
@@ -24,6 +22,11 @@ const sections: Section[] = [
       'Curiosity: we ask questions, share what we know and assume good intent.',
       'Generosity: "No one can help everyone, but everyone can help someone." When we are helped, we help someone else.',
     ],
+  },
+  {
+    title: 'Joining means agreeing',
+    intro:
+      'By joining a session of any kind (a chat, a video call, an event or any other activity), you accept to follow this Code of Conduct. If you are a parent or guardian, you also agree to look after the children who take part with you.',
   },
   {
     title: 'Where this applies',
@@ -58,14 +61,14 @@ const sections: Section[] = [
     intro:
       'Families are part of this community and children are welcome to join in, with a parent or guardian. These rules exist to keep children safe and to help every adult do the right thing.',
     items: [
-      'Accounts are for adults ([18+]). Children take part through a parent or guardian\'s account and only while that adult is present.',
-      'A parent or guardian stays with their child, in the room or within earshot, for the whole call or activity. Guardians decide whether their child is on camera, speaks, or uses chat.',
+      'Members under 15 cannot join community events, calls or chats unless they are accompanied by an adult parent or guardian, who is present for the whole activity. Members aged 15 and over may take part on their own.',
+      'Because we meet online, "accompanied" means the guardian is next to the child, in the same room or within earshot, for the whole call or activity. Guardians decide whether their child is on camera, speaks, or uses chat.',
       'Children use a first name or nickname only. Never share a child\'s surname, school, address, phone number or other identifying details in a call, chat or profile.',
       'No one may take, share or record photos, video or audio of a child without the guardian\'s clear permission.',
       'Adults never contact a child privately: no direct messages, no private rooms, no asking a child for contact details or to meet outside the community. If a child needs to be reached, go through their guardian.',
       'Sessions can be marked "family-friendly" or "adults only". Anything marked family-friendly must suit all ages in language, topics and content.',
       'Hosts may ask anyone to leave a call, or remove them, if they think a child\'s safety or comfort is at risk. Hosts do not need to wait for proof.',
-      'If a child may be in danger, contact your local emergency number first ([112] in Denmark and across the EU), then tell us.',
+      'If you are worried about a child\'s safety or wellbeing, tell the host straight away and write to conduct@educatefor.life.',
     ],
   },
   {
@@ -87,8 +90,8 @@ const sections: Section[] = [
     intro:
       'If something makes you or someone else uncomfortable, you can leave a call at any time, tell the host, or contact us:',
     items: [
-      'Email [conduct@educatefor.life] with what happened, where and when. Include a screenshot if you have one.',
-      'Reports are read by [named people] and kept confidential. We share only what is needed to act.',
+      'Email conduct@educatefor.life with your questions or concerns, saying what happened, where and when. Include a screenshot if you have one.',
+      'Reports are read by the community team and kept confidential. We share only what is needed to act.',
       'We never punish someone for reporting in good faith.',
     ],
   },
@@ -100,19 +103,11 @@ const sections: Section[] = [
   {
     title: 'Keeping this Code alive',
     intro:
-      'This Code grows with the community. We will review it [once a year] and tell members when it changes. Questions or ideas are always welcome.',
+      'This Code grows with the community. We will review it once a year and tell members when it changes. Questions or ideas are always welcome.',
   },
 ];
 
-const CodeOfConductDraft = () => {
-  useEffect(() => {
-    const meta = document.createElement('meta');
-    meta.name = 'robots';
-    meta.content = 'noindex';
-    document.head.appendChild(meta);
-    return () => { document.head.removeChild(meta); };
-  }, []);
-
+const CodeOfConduct = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -121,14 +116,6 @@ const CodeOfConductDraft = () => {
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-8">
             <ArrowLeft className="w-4 h-4" /> Home
           </Link>
-
-          <div role="note" className="flex gap-3 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 mb-8 text-sm">
-            <FileWarning className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-            <p>
-              <strong>Draft for review, not yet adopted.</strong> Text in [square brackets] is still to be decided. This
-              page is not linked from the site.
-            </p>
-          </div>
 
           <motion.header initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
             <span className="text-sm font-medium text-primary tracking-widest uppercase mb-3 block">Our promise to each other</span>
@@ -171,4 +158,4 @@ const CodeOfConductDraft = () => {
   );
 };
 
-export default CodeOfConductDraft;
+export default CodeOfConduct;
