@@ -39,6 +39,11 @@ const COUNTRY_COORDS: Record<string, [number, number]> = {
   'Bangladesh': [90, 24], 'Sri Lanka': [81, 7],
   'Ghana': [-2, 8], 'Tanzania': [35, -6],
   'Ethiopia': [40, 9], 'Morocco': [-5, 32],
+  'Albania': [20, 41], 'Bahrain': [50.5, 26], 'Belize': [-88.5, 17.2],
+  'Bosnia and Herzegovina': [18, 44], 'El Salvador': [-88.9, 13.7],
+  'Guyana': [-59, 5], 'Hong Kong': [114.2, 22.3], 'Kazakhstan': [67, 48],
+  'Lebanon': [35.8, 33.9], 'Panama': [-80, 8.5], 'Uganda': [32, 1.4],
+  'Uzbekistan': [64, 41],
 };
 
 interface MemberStats {
