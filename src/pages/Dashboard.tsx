@@ -2,7 +2,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Users, BookOpen, Calendar, ArrowRight } from 'lucide-react';
+import { Users, BookOpen, Calendar, ArrowRight, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -53,7 +53,7 @@ const Dashboard = () => {
           </div>
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             <Link to="/members/directory" className="group">
               <div className="bg-card border border-border rounded-xl p-6 hover:border-primary/40 transition-colors h-full">
                 <Users className="w-8 h-8 text-primary mb-4" />
@@ -95,6 +95,21 @@ const Dashboard = () => {
                 </p>
                 <span className="inline-flex items-center gap-1 text-sm text-primary mt-4">
                   Browse <ArrowRight className="w-4 h-4" />
+                </span>
+              </div>
+            </Link>
+
+            <Link to="/townhall" className="group">
+              <div className="bg-card border border-border rounded-xl p-6 hover:border-primary/40 transition-colors h-full">
+                <Video className="w-8 h-8 text-primary mb-4" />
+                <h3 className="font-display text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                  Townhall
+                </h3>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Jump into a live video call with fellow members.
+                </p>
+                <span className="inline-flex items-center gap-1 text-sm text-primary mt-4">
+                  Join <ArrowRight className="w-4 h-4" />
                 </span>
               </div>
             </Link>

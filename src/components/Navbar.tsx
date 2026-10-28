@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import logo from "/logo.png";
 
-type NavLink = { label: string; href: string; children?: { label: string; href: string }[] };
+type NavLink = { label: string; href: string; authOnly?: boolean; children?: { label: string; href: string }[] };
 
 const navLinks: NavLink[] = [
   {
@@ -27,7 +27,7 @@ const navLinks: NavLink[] = [
   { label: "Skills", href: "/skills" },
   { label: "Library", href: "/library" },
   { label: "Chat", href: "/chat" },
-  { label: "Townhall", href: "/townhall" },
+  { label: "Townhall", href: "/townhall", authOnly: true },
   { label: "Features", href: "/#features" },
   { label: "Members", href: "/members" },
 ];
@@ -35,6 +35,8 @@ const navLinks: NavLink[] = [
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { user, profile, signOut } = useAuth();
+
+  const visibleLinks = navLinks.filter((link) => !link.authOnly || user);
 
   const initials = (profile?.display_name || profile?.full_name || '?').slice(0, 2).toUpperCase();
 
@@ -46,7 +48,7 @@ const Navbar = () => {
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) =>
+          {visibleLinks.map((link) =>
             link.children ? (
               <DropdownMenu key={link.label}>
                 <DropdownMenuTrigger asChild>
@@ -124,7 +126,7 @@ const Navbar = () => {
             className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-xl"
           >
             <div className="flex flex-col gap-4 p-6">
-              {navLinks.map((link) => (
+              {visibleLinks.map((link) => (
                 <div key={link.label} className="flex flex-col gap-2">
                   <Link
                     to={link.href}

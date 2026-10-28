@@ -1,14 +1,20 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Users, Video } from 'lucide-react';
+import { Video } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import VideoRoom from '@/components/video/VideoRoom';
-import { Button } from '@/components/ui/button';
 
 const Townhall = () => {
   const { user, loading } = useAuth();
+  const navigate = useNavigate();
+
+  // The Townhall is for signed-in members only.
+  useEffect(() => {
+    if (!loading && !user) navigate('/auth', { replace: true });
+  }, [user, loading, navigate]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -27,17 +33,7 @@ const Townhall = () => {
           </p>
         </motion.div>
 
-        {loading ? null : user ? (
-          <VideoRoom target={{ room: 'townhall' }} joinLabel="Join the Townhall" />
-        ) : (
-          <div className="rounded-2xl border border-border bg-card p-8 md:p-12 text-center glow-border">
-            <Users className="mx-auto mb-4 h-10 w-10 text-primary" />
-            <p className="text-muted-foreground mb-6">The Townhall is for registered members. Sign in to join the call.</p>
-            <Button variant="hero" size="lg" asChild>
-              <Link to="/auth">Sign in or join the community</Link>
-            </Button>
-          </div>
-        )}
+        {user && <VideoRoom target={{ room: 'townhall' }} joinLabel="Join the Townhall" />}
       </div>
       <Footer />
     </div>
