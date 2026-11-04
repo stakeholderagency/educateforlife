@@ -87,7 +87,9 @@ const ProfileSetup = () => {
 
   // Check for legacy member data to pre-fill
   useEffect(() => {
-    if (!user || legacyLoaded || authLoading) return;
+    // Wait for the profile too: it loads just after the session, and only then do we
+    // know whether this is a new member (claim check) or an existing one (edit).
+    if (!user || legacyLoaded || authLoading || !profile) return;
     if (isEditing) { setLegacyLoaded(true); return; }
     const checkLegacy = async () => {
       const email = user.email;
@@ -116,7 +118,7 @@ const ProfileSetup = () => {
       setLegacyLoaded(true);
     };
     checkLegacy();
-  }, [user, legacyLoaded, authLoading, isEditing, toast]);
+  }, [user, profile, legacyLoaded, authLoading, isEditing, toast]);
 
   useEffect(() => {
     if (!authLoading && !user) navigate('/auth');
