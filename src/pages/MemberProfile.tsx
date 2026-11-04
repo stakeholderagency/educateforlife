@@ -14,6 +14,7 @@ import {
 import type { Enums, Tables } from '@/integrations/supabase/types';
 import Navbar from '@/components/Navbar';
 import InviteToConnectDialog from '@/components/InviteToConnectDialog';
+import IntroVideoCard from '@/components/IntroVideoCard';
 
 type MemberType = Enums<'member_type'>;
 type Profile = Tables<'profiles'>;
@@ -199,19 +200,15 @@ const MemberProfile = () => {
             {profile.bio && <p className="text-foreground/80 mt-6 leading-relaxed">{profile.bio}</p>}
           </div>
 
-          {/* Community Introduction Video */}
-          <div className="bg-card border border-border rounded-xl p-6 mb-6">
-            <h2 className="font-display text-lg font-semibold text-foreground mb-4">Our Community</h2>
-            <div className="relative w-full aspect-video rounded-lg overflow-hidden">
-              <iframe
-                src="https://www.youtube.com/embed/T08UZOCWM8I"
-                title="EducateforLife Community"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="absolute inset-0 w-full h-full"
-              />
-            </div>
-          </div>
+          {userId && (
+            <IntroVideoCard
+              userId={userId}
+              firstName={p.first_name || profile.display_name || 'this member'}
+              url={p.intro_video_url || null}
+              isOwnProfile={isOwnProfile}
+              onSaved={(url) => setProfile({ ...(profile as any), intro_video_url: url })}
+            />
+          )}
 
           <div className="grid md:grid-cols-2 gap-6">
             {profile.mission_statement && (
