@@ -9,6 +9,9 @@ Recreated 2026-10-28 from the Lovable project `96630f1e-46ba-4a76-9889-a6154b0b1
 - SPA routing: `vercel.json` rewrites everything except `/assets/` to `index.html`.
 - Auth redirects use `window.location.origin`; add each deployed origin to Supabase Auth → URL Configuration.
 - Privacy model: members see other members only through `public_profiles` / `public_legacy_members` (masked views); `legacy_members.email` is never readable by non-admins.
+  - Both views are `security_invoker = off` on purpose (they run as owner so they can show every member's masked row; anon has no SELECT). Never "fix" the Supabase linter warning by switching them to invoker, and never add a blanket `USING (true)` SELECT policy on `profiles` or `legacy_members` to make a view work: in 2026-03/05 that combination first hid every other member, then exposed all 642 legacy emails to any signed-in account (fixed 2026-11-04, migration `20261104140000`).
+  - Base-table policies are own-row (match `auth.jwt() ->> 'email'`, not `auth.users`, which `authenticated` cannot read) plus admin/moderator.
+  - Re-test after any change: `begin; set local role authenticated; set local request.jwt.claims = '{"sub":"<member uuid>","role":"authenticated","email":"x@example.invalid"}'; select count(email) from legacy_members;` must be 0, and `select count(*) from public_profiles` must equal all profiles.
 - Legacy member avatars are rehosted in the `avatars` bucket under `legacy/<id>.<ext>` (done 2026-10-28); no Mighty Networks URLs remain.
 
 ## Video rooms (Whereby Embedded)
