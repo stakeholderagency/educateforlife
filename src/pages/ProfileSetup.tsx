@@ -38,7 +38,11 @@ const workTypeLabels: Record<WorkType, string> = {
 };
 
 const ProfileSetup = () => {
-  const { user, profile, refreshProfile } = useAuth();
+  const { user, profile, loading: authLoading, refreshProfile } = useAuth();
+  // Members who finished onboarding come here from "Edit"; the same form edits their profile.
+  const isEditing = !!profile?.onboarding_completed;
+  const [prefilled, setPrefilled] = useState(false);
+  const [workId, setWorkId] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
   const [step, setStep] = useState(0);
@@ -83,7 +87,8 @@ const ProfileSetup = () => {
 
   // Check for legacy member data to pre-fill
   useEffect(() => {
-    if (!user || legacyLoaded) return;
+    if (!user || legacyLoaded || authLoading) return;
+    if (isEditing) { setLegacyLoaded(true); return; }
     const checkLegacy = async () => {
       const email = user.email;
       if (!email) { setLegacyLoaded(true); return; }
@@ -111,15 +116,51 @@ const ProfileSetup = () => {
       setLegacyLoaded(true);
     };
     checkLegacy();
-  }, [user, legacyLoaded, toast]);
+  }, [user, legacyLoaded, authLoading, isEditing, toast]);
 
-  // Redirect if onboarding already completed; load existing data if editing
   useEffect(() => {
-    if (!user) navigate('/auth');
-    if (profile && profile.onboarding_completed) {
-      navigate('/dashboard');
-    }
-  }, [user, profile, navigate]);
+    if (!authLoading && !user) navigate('/auth');
+  }, [authLoading, user, navigate]);
+
+  // Editing: fill the form from the saved profile, current work entry and interests.
+  useEffect(() => {
+    if (!user || !profile || !isEditing || prefilled) return;
+    const p = profile as any;
+    setFirstName(p.first_name || '');
+    setLastName(p.last_name || '');
+    setDisplayName(p.display_name || '');
+    setHeadline(p.headline || '');
+    setBio(p.bio || '');
+    setLocationCity(p.location_city || '');
+    setLocationCountry(p.location_country || '');
+    setMemberTypes((p.member_type as MemberType[] | null) || []);
+    setReferrerName(p.referrer_name || '');
+    setMissionStatement(p.mission_statement || '');
+    setSkills(p.skills || []);
+    setLookingFor(p.looking_for || '');
+    setOffering(p.offering || '');
+    setLinkedinUrl(p.linkedin_url || '');
+    setWebsiteUrl(p.website_url || '');
+    setAvatarUrl(p.avatar_url || null);
+    setPrefilled(true);
+    (async () => {
+      const [workRes, interestsRes] = await Promise.all([
+        supabase.from('member_work').select('*').eq('user_id', user.id)
+          .order('is_current', { ascending: false }).order('created_at', { ascending: true }).limit(1),
+        supabase.from('member_interests').select('interest, category').eq('user_id', user.id),
+      ]);
+      const w = workRes.data?.[0] as any;
+      if (w) {
+        setWorkId(w.id);
+        setWorkType(w.work_type);
+        setOrgName(w.organization_name || '');
+        setOrgDomain(w.organization_domain || '');
+        setRoleTitle(w.role_title || '');
+        setWorkDescription(w.description || '');
+      }
+      if (interestsRes.data) setInterests(interestsRes.data as any);
+    })();
+  }, [user, profile, isEditing, prefilled]);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -231,21 +272,41 @@ const ProfileSetup = () => {
       return;
     }
 
-    if (orgName.trim()) {
-      await supabase.from('member_work').insert({
-        user_id: user.id,
-        work_type: workType,
-        organization_name: orgName,
-        organization_domain: orgDomain || null,
-        role_title: roleTitle || null,
-        description: workDescription || null,
-      });
+    const failed: string[] = [];
+    const workFields = {
+      work_type: workType,
+      organization_name: orgName.trim(),
+      organization_domain: orgDomain || null,
+      role_title: roleTitle || null,
+      description: workDescription || null,
+    };
+    if (workId) {
+      // Editing the entry we loaded; clearing the organisation removes it.
+      const { error } = orgName.trim()
+        ? await supabase.from('member_work').update(workFields).eq('id', workId)
+        : await supabase.from('member_work').delete().eq('id', workId);
+      if (error) failed.push('work');
+    } else if (orgName.trim()) {
+      const { error } = await supabase.from('member_work').insert({ user_id: user.id, ...workFields });
+      if (error) failed.push('work');
     }
 
+    // Interests are saved as the full list shown in the form: insert the new list
+    // first, then remove the old rows, so a failure never loses them.
+    const { data: oldInterests } = isEditing
+      ? await supabase.from('member_interests').select('id').eq('user_id', user.id)
+      : { data: [] as { id: string }[] };
+    let interestsOk = true;
     if (interests.length > 0) {
-      await supabase.from('member_interests').insert(
+      const { error } = await supabase.from('member_interests').insert(
         interests.map((i) => ({ user_id: user.id, interest: i.interest, category: i.category }))
       );
+      if (error) { interestsOk = false; failed.push('interests'); }
+    }
+    const oldIds = (oldInterests || []).map((r: any) => r.id);
+    if (interestsOk && oldIds.length > 0) {
+      const { error } = await supabase.from('member_interests').delete().in('id', oldIds);
+      if (error) failed.push('interests');
     }
 
     // Remove the legacy record after successful claim
@@ -255,6 +316,19 @@ const ProfileSetup = () => {
 
     await refreshProfile();
     setSaving(false);
+    if (failed.length > 0) {
+      toast({
+        title: 'Profile saved, with a problem',
+        description: `Your ${failed.join(' and ')} could not be saved. Please try again.`,
+        variant: 'destructive',
+      });
+      return;
+    }
+    if (isEditing) {
+      toast({ title: 'Profile updated' });
+      navigate(`/members/${user.id}`);
+      return;
+    }
     toast({ title: 'Profile complete!', description: legacyId ? 'Your membership has been claimed. Welcome back!' : 'Welcome to the community.' });
     navigate('/dashboard');
   };
@@ -266,8 +340,12 @@ const ProfileSetup = () => {
           <a href="/" className="font-display font-bold text-2xl tracking-tight inline-block mb-2">
             <img src="/logo.png" alt="Educatefor.Life" className="w-16 h-16 mx-auto" />
           </a>
-          <h1 className="font-display text-2xl font-bold text-foreground mt-4">Set Up Your Profile</h1>
-          <p className="text-muted-foreground mt-1">Tell us about yourself so we can match you with the right people.</p>
+          <h1 className="font-display text-2xl font-bold text-foreground mt-4">{isEditing ? 'Edit Your Profile' : 'Set Up Your Profile'}</h1>
+          <p className="text-muted-foreground mt-1">
+            {isEditing
+              ? 'Change anything below, then save. You can save from any step.'
+              : 'Tell us about yourself so we can match you with the right people.'}
+          </p>
         </div>
 
         {/* Progress */}
@@ -538,15 +616,22 @@ const ProfileSetup = () => {
             <Button variant="ghost" onClick={() => setStep(step - 1)} disabled={step === 0}>
               <ArrowLeft className="w-4 h-4 mr-2" /> Back
             </Button>
-            {step < STEPS.length - 1 ? (
-              <Button variant="hero" onClick={() => setStep(step + 1)}>
-                Next <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            ) : (
-              <Button variant="hero" onClick={handleSave} disabled={saving}>
-                {saving ? 'Saving...' : 'Complete Profile'}
-              </Button>
-            )}
+            <div className="flex gap-2">
+              {isEditing && step < STEPS.length - 1 && (
+                <Button variant="outline" onClick={handleSave} disabled={saving || !prefilled}>
+                  {saving ? 'Saving...' : 'Save changes'}
+                </Button>
+              )}
+              {step < STEPS.length - 1 ? (
+                <Button variant="hero" onClick={() => setStep(step + 1)}>
+                  Next <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              ) : (
+                <Button variant="hero" onClick={handleSave} disabled={saving || (isEditing && !prefilled)}>
+                  {saving ? 'Saving...' : isEditing ? 'Save changes' : 'Complete Profile'}
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>
