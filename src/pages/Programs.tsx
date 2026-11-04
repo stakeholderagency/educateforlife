@@ -281,14 +281,21 @@ const Programs = () => {
                       to know the community. When you are ready to build, apply.
                     </p>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                      <Button variant="hero" size="lg" asChild>
-                        <Link to={joinHref}>
-                          {user ? 'Go to your dashboard' : 'Start in Pathways'}
-                          <ArrowRight className="ml-2 w-4 h-4" />
-                        </Link>
+                      <Button variant="hero" size="lg" disabled aria-disabled="true">
+                        Applications coming soon
                       </Button>
                       <p className="text-sm text-muted-foreground">
-                        You can step back to Pathways whenever you need to.
+                        {user ? (
+                          'Keep growing in Pathways meanwhile.'
+                        ) : (
+                          <>
+                            Meanwhile,{' '}
+                            <Link to="/auth" className="text-primary hover:underline">
+                              join Pathways free
+                            </Link>
+                            .
+                          </>
+                        )}
                       </p>
                     </div>
                   </div>
