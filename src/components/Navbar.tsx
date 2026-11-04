@@ -24,6 +24,7 @@ const navLinks: NavLink[] = [
       { label: "Memorandum", href: "/memorandum" },
     ],
   },
+  { label: "Programs", href: "/programs" },
   { label: "Skills", href: "/skills" },
   { label: "Library", href: "/library" },
   { label: "Chat", href: "/chat" },

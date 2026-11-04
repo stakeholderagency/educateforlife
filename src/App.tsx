@@ -14,6 +14,7 @@ import Members from "./pages/Members";
 import MemberProfile from "./pages/MemberProfile";
 import LegacyMemberProfile from "./pages/LegacyMemberProfile";
 import Memorandum from "./pages/Memorandum";
+import Programs from "./pages/Programs";
 import Timeline from "./pages/Timeline";
 import CodeOfConduct from "./pages/CodeOfConduct";
 import Townhall from "./pages/Townhall";
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/timeline" element={<Timeline />} />
             <Route path="/memorandum" element={<Memorandum />} />
+            <Route path="/programs" element={<Programs />} />
             <Route path="/code-of-conduct" element={<CodeOfConduct />} />
             <Route path="/code-of-conduct/draft" element={<Navigate to="/code-of-conduct" replace />} />
             <Route path="/townhall" element={<Townhall />} />

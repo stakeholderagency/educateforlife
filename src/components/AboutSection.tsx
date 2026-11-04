@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 
 const checkpoints = [
-  "Develop Your Own Pathways in Life",
-  "Build Programs or Services That Help Others",
+  { label: "Develop Your Own Pathways in Life", tag: "Pathways · Free", href: "/programs#pathways" },
+  { label: "Build a Microbusiness with Programs or Services That Help Others", tag: "Builders · By application", href: "/programs#builders" },
 ];
 
 const AboutSection = () => {
@@ -38,12 +38,22 @@ const AboutSection = () => {
 
             <div className="space-y-4">
               {checkpoints.map((item) => (
-                <div key={item} className="flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                  <span className="font-medium">{item}</span>
-                </div>
+                <Link key={item.label} to={item.href} className="flex items-start gap-3 group">
+                  <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <span>
+                    <span className="font-medium group-hover:text-primary transition-colors">{item.label}</span>
+                    <span className="block text-sm text-muted-foreground">{item.tag}</span>
+                  </span>
+                </Link>
               ))}
             </div>
+
+            <Link
+              to="/programs"
+              className="inline-flex items-center gap-2 mt-8 mr-6 text-sm font-medium text-primary hover:underline"
+            >
+              Explore our programs <ArrowRight className="w-4 h-4" />
+            </Link>
 
             <Link
               to="/memorandum"
